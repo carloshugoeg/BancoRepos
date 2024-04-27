@@ -1,4 +1,4 @@
-﻿Console.ForegroundColor = ConsoleColor.DarkBlue;
+﻿Console.ForegroundColor = ConsoleColor.DarkRed;
 Console.WriteLine("----BANCO DE GUATEMALA----");
 Console.ForegroundColor = ConsoleColor.White;
 
