@@ -25,7 +25,8 @@ namespace Banco
         public void Transaccion(double monto)
         {
             Saldo += monto;
-            Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE"); Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE");
+             Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void MostrarInformacion(List<CuentaAhorro> cuentas)
@@ -158,7 +159,7 @@ namespace Banco
 
             int bandera = 0;
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------BANCO DE GUATEMALA------"); Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue; Console.WriteLine("------BANCO DE GUATEMALA------"); Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("");
             if (bandera == 0)
             {
@@ -176,7 +177,10 @@ namespace Banco
             {
                 do
                 {
-                    Console.WriteLine("------SELECCIONE UNA OPCION------");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"------SELECCIONE UNA OPCION------ ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("");
                     Console.WriteLine("1. Apertura de Cuenta");
                     Console.WriteLine("2. Depositos");
                     Console.WriteLine("3. Retiros");
@@ -211,11 +215,14 @@ namespace Banco
             void Apertura(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria, List<Creditos> creditos)
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------APERTURA DE CUENTAS------"); Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.DarkBlue; Console.WriteLine("------APERTURA DE CUENTAS------"); Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("");
                 do
                 {
-                    Console.WriteLine("Escoja una opcion: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"------SELECCIONE UNA OPCION------ ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("");
                     Console.WriteLine("    1. Ahorro");
                     Console.WriteLine("    2. Monetaria");
                     Console.WriteLine("    3. Credito");
@@ -303,7 +310,10 @@ namespace Banco
                     int cuenta = 0;
                     double monto;
                     bool b = false;
-                    Console.Write("Escoja una opcion: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"------SELECCIONE UNA OPCION------ ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("");
                     Console.Write("     1. Deposito a cuenta: ");
                     Console.Write("     2. Abono a credito: ");
                     string a = Console.ReadLine();
