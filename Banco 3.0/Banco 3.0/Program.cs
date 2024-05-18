@@ -14,7 +14,7 @@ namespace Banco
         public DateTime Fecha { get; set; }
         public string Tipo { get; set; }
         public double Monto { get; set; }
-        
+
 
         public Transaccion(string tipo, double monto)
         {
@@ -68,17 +68,28 @@ namespace Banco
         }
         public void MostrarEstadoDeCuenta()
         {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------ESTADISTICAS------"); Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("");
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine($"Estado de cuenta para la cuenta: {NumeroCuenta}");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Fecha\t\t\tTipo\t\tMonto");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine("");
 
             foreach (var transaccion in Transacciones)
             {
-                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t\t{transaccion.Monto:C}");
+                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t{transaccion.Monto:C}");
             }
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Presione ENTER para continuar");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.ReadKey();
+            Console.Clear();
         }
     }
     public class CuentaMonetaria
@@ -182,7 +193,7 @@ namespace Banco
 
             int bandera = 0;
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.DarkBlue; Console.WriteLine("------BANCO DE GUATEMALA------"); Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------BANCO DE GUATEMALA------"); Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("");
             if (bandera == 0)
             {
@@ -199,7 +210,9 @@ namespace Banco
             } while (true);
 
             void Menu()
+                
             {
+                Console.Clear();
                 do
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -261,15 +274,20 @@ namespace Banco
 
                 if (cuentaAhorro != null)
                 {
+                    Console.WriteLine("");
                     cuentaAhorro.MostrarEstadoDeCuenta();
                 }
                 else if (cuentaMonetaria != null)
                 {
+                    Console.WriteLine("");
                     cuentaMonetaria.MostrarEstadoDeCuenta();
                 }
                 else
                 {
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Cuenta no encontrada.");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             void Apertura(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
@@ -285,7 +303,6 @@ namespace Banco
                     Console.WriteLine("");
                     Console.WriteLine("1. Ahorro");
                     Console.WriteLine("2. Monetaria");
-                    //Console.WriteLine("3. Credito");
                     string op = Console.ReadLine();
                     int num;
                     double depo;
@@ -303,12 +320,25 @@ namespace Banco
                             {
                                 Console.Write("Ingrese el monto inicial (min Q200.00): Q.");
                                 depo = Math.Abs(Convert.ToDouble(Console.ReadLine()));
-                            } while (depo < 200);
+                                if (depo < 200)
+                                {
+                                    Console.WriteLine("");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("MONTO INSUFICIENTE. VUELVA A INTENTARLO");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.WriteLine("");
+                                }
+                                } while (depo < 200);
+                           
+                            
                             num = IngresarNumeroCuenta(cuentaAhorro);
                             Console.Write("Ingrese a nombre de quien se aperturara la cuenta: ");
                             n = Console.ReadLine();
+                            Console.WriteLine("");
                             cuentaAhorro.Add(new CuentaAhorro(n, num, depo));
+                            Console.WriteLine("");
                             Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("Cuenta Ahorro Creada de forma correta"); Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("");
                             Console.WriteLine("Nombre: " + n);
                             Console.WriteLine("Saldo: Q." + depo);
                             Console.WriteLine("Numero de cuenta: " + num);
@@ -324,12 +354,24 @@ namespace Banco
                             {
                                 Console.Write("Ingrese el monto inicial (min Q200.00): Q.");
                                 depo = Math.Abs(Convert.ToDouble(Console.ReadLine()));
+                                if (depo < 200)
+                                {
+                                    Console.WriteLine("");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("MONTO INSUFICIENTE. VUELVA A INTENTARLO");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.WriteLine("");
+                                }
                             } while (depo < 200);
                             num = IngresarNumCuenta(cuentaMonetaria);
+
                             Console.Write("Ingrese a nombre de quien se aperturara la cuenta: ");
                             n = Console.ReadLine();
+                            Console.WriteLine("");
                             cuentaMonetaria.Add(new CuentaMonetaria(n, num, depo));
+                            Console.WriteLine("");
                             Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("Cuenta Monetaria Creada de forma correta"); Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("");
                             Console.WriteLine("Nombre: " + n);
                             Console.WriteLine("Saldo: Q." + depo);
                             Console.WriteLine("Numero de cuenta: " + num);
@@ -344,12 +386,14 @@ namespace Banco
                 Console.WriteLine("");
                 bandera++;
                 Console.ReadKey();
+                Console.Clear();
             }
             void Depositos(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
             {
                 string no;
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------DEPOSITOS------"); Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("");
                 do
                 {
                     int cuenta = 0;
@@ -359,17 +403,21 @@ namespace Banco
                     Console.WriteLine($"------SELECCIONE UNA OPCION------ ");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("");
-                    Console.Write("1. Cuenta Ahorro: ");
-                    Console.Write("2. Cuenta Monetario: ");
+                    Console.WriteLine("1. Cuenta Ahorro ");
+                    Console.WriteLine("2. Cuenta Monetario");
                     string a = Console.ReadLine();
                     switch (a)
                     {
                         case "1":
                             {
+                                Console.WriteLine("");
                                 Console.Write("Ingrese el numero de cuenta al cual depositar: ");
                                 no = Console.ReadLine();
+                                //Poner el nombre del usuario
+                            
                                 if (no.Length == 4)
                                 {
+                                    Console.WriteLine("");
                                     Console.ForegroundColor = ConsoleColor.Yellow;
                                     Console.WriteLine($"------DEPOSITO AHORRO------ ");
                                     Console.ForegroundColor = ConsoleColor.White;
@@ -383,22 +431,36 @@ namespace Banco
                                     }
                                     do
                                     {
+                                        //POner el nombre del usuario
                                         Console.Write("Ingrese el monto a depositar: ");
                                         monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                                     } while (monto <= 0);
-
+                                    Console.WriteLine("");
                                     cuentaAhorro[cuenta].Transaccion(monto);
                                     Console.WriteLine("Saldo actual: Q" + cuentaAhorro[cuenta].Saldo);
+
+
                                 }
-                                else Console.WriteLine("Formato de cuenta invalido");
-                            }               
+                                else
+                                {
+                                    Console.WriteLine("");
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("FORMATO DE CUENTA INVALIDO"); Console.ForegroundColor = ConsoleColor.White;
+                                    Console.WriteLine("");
+                                }
+      
+                               
+                            }
                             break;
 
                         case "2":
                             Console.Write("Ingrese el numero de cuenta al cual depositar: ");
                             no = Console.ReadLine();
+                            Console.WriteLine("");
                             if (no.Length == 5)
                             {
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.WriteLine($"------DEPOSITO MONETARIO------ ");
                                 Console.ForegroundColor = ConsoleColor.White;
@@ -416,28 +478,41 @@ namespace Banco
 
                                 do
                                 {
+                                    //Bienvenido Nombre
                                     Console.Write("Ingrese el monto a depositar: ");
+                                    
+                                    //Se descompone con letras
                                     monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                                 } while (monto <= 0);
-
+                                Console.WriteLine("");
                                 cuentaMonetaria[cuenta].Transaccion(monto);
                                 Console.WriteLine("Saldo actual: Q." + cuentaMonetaria[cuenta].Saldo);
+                                
                             }
-                            else Console.WriteLine("Formato de cuenta invalido");
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("FORMATO DE CUENTA INVALIDO");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine("");
+                            }
                             break;
                     }
                     break;
                 } while (true);
-                        Console.WriteLine(""); Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(""); Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Presione ENTER para salir");
                 Console.WriteLine("");
                 Console.ReadKey();
+                Console.Clear();
             }
             void Credit(List<Creditos> creditos)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("------CREDITO------");
+                Console.WriteLine("");
                 string no;
                 do
                 {
@@ -453,8 +528,8 @@ namespace Banco
                     Console.WriteLine($"------SELECCIONE UNA OPCION------ ");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("");
-                    Console.Write("1. Solicitud de Credito: ");
-                    Console.Write("2. Abono a Credito: ");
+                    Console.WriteLine("1. Solicitud de Credito: ");
+                    Console.WriteLine("2. Abono a Credito: ");
                     string p = Console.ReadLine();
                     switch (p)
                     {
@@ -476,18 +551,31 @@ namespace Banco
                                 } while (depo < 100 || depo > 999999999.99);
                                 do
                                 {
-                                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("NOTA: prestamo de plazo fijo, se le aplicara el interes en base a la cantidad de años con un interes del 12%");
-                                    Console.WriteLine("      y este se mantendra sin importar el plazo con el que se termine pagando al final."); Console.ForegroundColor = ConsoleColor.White;
+                                    Console.WriteLine("");
+                                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("NOTA:");
+                                     Console.WriteLine("Prestamo de plazo fijo, se le aplicara el interes en base a la cantidad de años con un interes del 12%");
+                                    Console.WriteLine("Se mantendra sin importar el plazo con el que se termine pagando al final."); Console.ForegroundColor = ConsoleColor.White;
                                     Console.WriteLine("");
                                     Console.Write("Ingrese la cantidad de años para su prestamo de plazo fijo (min 1 y max 60): ");
                                     anos = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                                 } while (anos < 1 || anos > 60);
                                 double deuda = Math.Round(depo * (Math.Pow((1 + 0.12), anos)), 2);
                                 creditos.Add(new Creditos(n, dpi, deuda, depo));
-                                Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("Prestamo acreditado de forma correta"); Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("PRESTAMO ACREDITADO"); Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine("");
+
+                                Console.WriteLine("-------------------------------------------------");
+                                Console.WriteLine($"Estado de cuenta para la cuenta: ");
+                                Console.WriteLine("Fecha\t\t\tTipo\t\tMonto");
+                                Console.WriteLine("-------------------------------------------------");
+                                Console.WriteLine("");
+
                                 Console.WriteLine("Nombre: " + n);
-                                Console.WriteLine("Prestamo por Q." + depo);
                                 Console.WriteLine("DPI: " + dpi);
+                                Console.WriteLine("");
+                                //Poner aquí la cantidad que se suma con el interés
+                                Console.WriteLine("Prestamo por Q." + depo);
                                 Console.WriteLine("Deuda con interes: Q" + deuda);
 
                             }
@@ -515,24 +603,29 @@ namespace Banco
                                     {
                                         Console.WriteLine("No se encontro dicho DPI");
                                         break;
-                                    }  
+                                    }
                                     do
                                     {
                                         Console.WriteLine("Bienvenid@ " + creditos[cuenta].Nombre);
                                         Console.Write("Ingrese el monto a abonar: Q.");
+                                        Console.WriteLine("");
                                         monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                                     } while (monto <= 0);
                                     if (creditos[cuenta].Deuda >= monto)
                                     {
                                         creditos[cuenta].Deuda -= monto;
                                         Console.WriteLine("Deuda restante: Q" + Math.Round(creditos[cuenta].Deuda, 2));
+                                        Console.WriteLine("");
                                     }
                                     else if (creditos[cuenta].Deuda < monto)
                                     {
+                                        Console.WriteLine("");
                                         Console.WriteLine($"Solamente se aceptaron Q.{creditos[cuenta].Deuda}, el resto se le devolvera en efectivo");
+                                        Console.WriteLine("");
                                     }
                                     if (creditos[cuenta].Deuda == 0)
                                     {
+                                        Console.WriteLine("");
                                         Console.ForegroundColor = ConsoleColor.Green;
                                         Console.WriteLine("FELICIDADES!!! Usted ha saldado su deuda con el banco");
                                         Console.ForegroundColor = ConsoleColor.White;
@@ -550,11 +643,13 @@ namespace Banco
                 Console.WriteLine("Presione ENTER para salir");
                 Console.WriteLine("");
                 Console.ReadKey();
+                Console.Clear();
             }
             void Retiros(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------RETIROS------"); Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("");
                 string no;
                 do
                 {
@@ -565,8 +660,13 @@ namespace Banco
                     no = Console.ReadLine();
                     if (no.Length == 4)
                     {
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("CUENTA DE AHORRO DETECTADA");
-                        Console.WriteLine("Para poder hacer retiros con cheque, porfavor solicite una cuenta monetaria");
+                        Console.WriteLine("");
+                        Console.WriteLine("NOTA:");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("Para poder hacer retiros con cheque, solicite una cuenta monetaria");
                         break;
                         //Console.ForegroundColor = ConsoleColor.Yellow;
                         //Console.WriteLine($"------RETIRO AHORRO------ ");
@@ -589,6 +689,7 @@ namespace Banco
                     }
                     else if (no.Length == 5)
                     {
+                        Console.WriteLine("");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine($"------DEPOSTIO MONETARIO------ ");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -602,8 +703,11 @@ namespace Banco
                         }
                         if (!b)
                         {
-                            Console.WriteLine("No se encontro dicho DPI");
-                            break;
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("No se ha encontrado el número de DPI");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("");
                         }
 
                         do
@@ -611,10 +715,15 @@ namespace Banco
                             Console.Write("Ingrese el monto a retirar: ");
                             monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                         } while (monto <= 0);
-                        if(monto > cuentaMonetaria[cuenta].Saldo)
+                        if (monto > cuentaMonetaria[cuenta].Saldo)
                         {
                             cuentaMonetaria[cuenta].Saldo -= 150;
-                            Console.WriteLine("Usted efectuó un cheque sin fondos, se le hara una multa de Q150.00");
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Usted efectuó un cheque sin fondos,");
+                            Console.WriteLine("se le hara una multa de Q150.00");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("");
                             Console.WriteLine("Ahora su saldo actual es Q. " + cuentaMonetaria[cuenta].Saldo);
                             if (cuentaMonetaria[cuenta].Saldo < 0)
                             {
@@ -622,11 +731,19 @@ namespace Banco
                             }
                         }
                         else
-                        cuentaMonetaria[cuenta].Transaccion(monto * -1);
+                            cuentaMonetaria[cuenta].Transaccion(monto * -1);
                         Console.WriteLine("Saldo actual: Q." + cuentaMonetaria[cuenta].Saldo);
                         break;
                     }
-                    else Console.WriteLine("Formato de cuenta invalido");
+                    else {
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Formato de cuenta invalido");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("");
+                    }
+
+                        
                 } while (true);
                 Console.WriteLine("");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -634,12 +751,14 @@ namespace Banco
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("");
                 Console.ReadKey();
+                Console.Clear();
             }
-              
+
             void Estadisticas()
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------ESTADISTICAS------"); Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("");
             }
             int IngresarNumeroCuenta(List<CuentaAhorro> cuentas)
             {
@@ -653,10 +772,10 @@ namespace Banco
                     string inputNumeroCuenta = Console.ReadLine();
                     if (int.TryParse(inputNumeroCuenta, out numeroCuenta))
                     {
-                        // Check if the number has the correct size (4 digits)
+                       
                         if (inputNumeroCuenta.Length == 4)
                         {
-                            // Check if the number already exists in the list
+                          
                             cuentaExistente = cuentas.Any(cuenta => cuenta.NumeroCuenta == numeroCuenta);
 
                             if (!cuentaExistente)
@@ -665,17 +784,26 @@ namespace Banco
                             }
                             else
                             {
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("El número de cuenta ya existe. Intente de nuevo.");
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                         }
                         else
                         {
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("El número de cuenta debe tener 4 dígitos. Intente de nuevo.");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     else
                     {
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("El valor ingresado no es un número válido. Intente de nuevo.");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 } while (!numeroValido);
 
@@ -692,11 +820,9 @@ namespace Banco
                     Console.Write("Ingrese un número de cuenta de 5 dígitos: ");
                     string inputNumeroCuenta = Console.ReadLine();
                     if (int.TryParse(inputNumeroCuenta, out numeroCuenta))
-                    {
-                        // Check if the number has the correct size (4 digits)
+                    { 
                         if (inputNumeroCuenta.Length == 5)
-                        {
-                            // Check if the number already exists in the list
+                        { 
                             cuentaExistente = cuentas.Any(cuenta => cuenta.NumeroCuenta == numeroCuenta);
 
                             if (!cuentaExistente)
@@ -705,17 +831,26 @@ namespace Banco
                             }
                             else
                             {
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("El número de cuenta ya existe. Intente de nuevo.");
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                         }
                         else
                         {
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("El número de cuenta debe tener 5 dígitos. Intente de nuevo.");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                     }
                     else
                     {
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("El valor ingresado no es un número válido. Intente de nuevo.");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 } while (!numeroValido);
 
@@ -729,7 +864,7 @@ namespace Banco
 
                 do
                 {
-                    Console.Write("Ingrese su numero de DPI: ");
+                    Console.Write("Ingrese su numero de DPI (deben ser 13 números): ");
                     string inputNumeroCuenta = Console.ReadLine();
                     if (ulong.TryParse(inputNumeroCuenta, out numeroDPI))
                     {
@@ -745,17 +880,32 @@ namespace Banco
                             }
                             else
                             {
+
+                                Console.WriteLine("");
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("No se puede tener mas de 1 credito por cliente.");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine("");
                             }
                         }
                         else
                         {
+
+                            Console.WriteLine("");
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Numero de DPI invalido. Intente de nuevo.");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine("");
                         }
                     }
                     else
                     {
+
+                        Console.WriteLine("");
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("El valor ingresado no es un número válido. Intente de nuevo.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("");
                     }
                 } while (!numeroValido);
 
@@ -763,6 +913,6 @@ namespace Banco
             }
         }
 
-        
+
     }
 }
