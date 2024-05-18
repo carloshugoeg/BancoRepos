@@ -9,23 +9,41 @@ using System.Runtime.CompilerServices;
 
 namespace Banco
 {
+    public class Transaccion
+    {
+        public DateTime Fecha { get; set; }
+        public string Tipo { get; set; }
+        public double Monto { get; set; }
+        
+
+        public Transaccion(string tipo, double monto)
+        {
+            Fecha = DateTime.Now;
+            Tipo = tipo;
+            Monto = monto;
+        }
+    }
+
     public class CuentaAhorro
     {
         public string Nombre { get; set; }
         public int NumeroCuenta { get; set; }
         public double Saldo { get; set; }
-        public string Resumen { get; set; }
-        public CuentaAhorro(string nombre, int numeroCuenta, double saldo, string resumen)
+        public List<Transaccion> Transacciones { get; set; } = new List<Transaccion>();
+
+        public CuentaAhorro(string nombre, int numeroCuenta, double saldo)
         {
             Nombre = nombre;
             NumeroCuenta = numeroCuenta;
             Saldo = saldo;
-            Resumen = resumen;
         }
         public void Transaccion(double monto)
         {
             Saldo += monto;
-            Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE");
+            string tipo = monto >= 0 ? "Deposito" : "Retiro";
+            Transacciones.Add(new Transaccion(tipo, monto));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -48,18 +66,19 @@ namespace Banco
                 Console.WriteLine("{0,-" + nameLength + "} | {1,-" + numeroLength + "} | {2,-" + saldoLength + "}", cuenta.Nombre, cuenta.NumeroCuenta, cuenta.Saldo);
             }
         }
-        public bool Buscar(string cuenta)
+        public void MostrarEstadoDeCuenta()
         {
-            bool b;
-            b = string.Equals(NumeroCuenta.ToString(), cuenta);
-            if (b)
+            Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine($"Estado de cuenta para la cuenta: {NumeroCuenta}");
+            Console.WriteLine("Fecha\t\t\tTipo\t\tMonto");
+            Console.WriteLine("-------------------------------------------------");
+
+            foreach (var transaccion in Transacciones)
             {
-                return true;
+                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t\t{transaccion.Monto:C}");
             }
-            else
-            {
-                return false;
-            }
+            Console.WriteLine("Presione ENTER para continuar");
+            Console.ReadKey();
         }
     }
     public class CuentaMonetaria
@@ -67,13 +86,13 @@ namespace Banco
         public string Nombre { get; set; }
         public int NumeroCuenta { get; set; }
         public double Saldo { get; set; }
-        public string Resumen { get; set; }
-        public CuentaMonetaria(string nombre, int numeroCuenta, double saldo, string resumen)
+        public List<Transaccion> Transacciones { get; set; } = new List<Transaccion>();
+
+        public CuentaMonetaria(string nombre, int numeroCuenta, double saldo)
         {
             Nombre = nombre;
             NumeroCuenta = numeroCuenta;
             Saldo = saldo;
-            Resumen = resumen;
         }
         public void MostrarInformacion(List<CuentaMonetaria> cuentas)
         {
@@ -95,23 +114,25 @@ namespace Banco
                 Console.WriteLine("{0,-" + nameLength + "} | {1,-" + numeroLength + "} | {2,-" + saldoLength + "}", cuenta.Nombre, cuenta.NumeroCuenta, cuenta.Saldo);
             }
         }
-        public bool Buscar(string buscar)
-        {
-            bool b;
-            b = string.Equals(NumeroCuenta.ToString(), buscar);
-            if (b)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         public void Transaccion(double monto)
         {
             Saldo += monto;
-            Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE"); Console.ForegroundColor = ConsoleColor.White;
+            string tipo = monto >= 0 ? "Deposito" : "Retiro";
+            Transacciones.Add(new Transaccion(tipo, monto));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("TRANSACCION REALIZADA CORRECTAMENTE");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void MostrarEstadoDeCuenta()
+        {
+            Console.WriteLine($"Estado de cuenta para la cuenta: {NumeroCuenta}");
+            Console.WriteLine("Fecha\t\t\tTipo\t\tMonto");
+            Console.WriteLine("-------------------------------------------------");
+
+            foreach (var transaccion in Transacciones)
+            {
+                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t\t{transaccion.Monto:C}");
+            }
         }
     }
     public class Creditos
@@ -170,7 +191,7 @@ namespace Banco
 
                 Console.WriteLine("PRESIONE ENTER PARA CONTINUAR");
                 Console.ReadLine();
-                Apertura(cuentaAhorro, cuentaMonetaria, creditos);
+                Apertura(cuentaAhorro, cuentaMonetaria);
             }
             do
             {
@@ -189,30 +210,33 @@ namespace Banco
                     Console.WriteLine("2. Depositos");
                     Console.WriteLine("3. Retiros");
                     Console.WriteLine("4. Créditos");
-                    Console.WriteLine("5. Estadisticas");
+                    Console.WriteLine("5. Estados de cuenta");
                     Console.WriteLine("6. Salir");
 
                     string a = Console.ReadLine();
                     switch (a)
                     {
                         case "1":
-                            Apertura(cuentaAhorro, cuentaMonetaria, creditos);
+                            Apertura(cuentaAhorro, cuentaMonetaria);
                             break;
                         case "2":
-                            Depositos(cuentaAhorro, cuentaMonetaria, creditos);
+                            Depositos(cuentaAhorro, cuentaMonetaria);
                             break;
-                        //
-                        //case "3":
-                        //    Retiros(cuentaAhorro, cuentaMonetaria);
-                        //    break;
+
+                        case "3":
+                            Retiros(cuentaAhorro, cuentaMonetaria);
+                            break;
                         case "4":
                             Credit(creditos);
                             break;
 
-                        //case "4":
-                        //    Estadisticas(cuentaAhorro, cuentaMonetaria);
-                        //    break;
                         case "5":
+                            Console.WriteLine("Ingrese el número de cuenta para ver el estado de cuenta:");
+                            int numeroCuenta = int.Parse(Console.ReadLine());
+
+                            MostrarEstadoDeCuenta(numeroCuenta, cuentaAhorro, cuentaMonetaria);
+                            break;
+                        case "6":
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine($"------ESTUDIANTES------ ");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -230,7 +254,25 @@ namespace Banco
                     }
                 } while (true);
             }
-            void Apertura(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria, List<Creditos> creditos)
+            static void MostrarEstadoDeCuenta(int numeroCuenta, List<CuentaAhorro> cuentasAhorro, List<CuentaMonetaria> cuentasMonetarias)
+            {
+                var cuentaAhorro = cuentasAhorro.Find(c => c.NumeroCuenta == numeroCuenta);
+                var cuentaMonetaria = cuentasMonetarias.Find(c => c.NumeroCuenta == numeroCuenta);
+
+                if (cuentaAhorro != null)
+                {
+                    cuentaAhorro.MostrarEstadoDeCuenta();
+                }
+                else if (cuentaMonetaria != null)
+                {
+                    cuentaMonetaria.MostrarEstadoDeCuenta();
+                }
+                else
+                {
+                    Console.WriteLine("Cuenta no encontrada.");
+                }
+            }
+            void Apertura(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.DarkBlue; Console.WriteLine("------APERTURA DE CUENTAS------"); Console.ForegroundColor = ConsoleColor.White;
@@ -265,7 +307,7 @@ namespace Banco
                             num = IngresarNumeroCuenta(cuentaAhorro);
                             Console.Write("Ingrese a nombre de quien se aperturara la cuenta: ");
                             n = Console.ReadLine();
-                            cuentaAhorro.Add(new CuentaAhorro(n, num, depo, $"Se aperturo la cuenta con Q.{depo}"));
+                            cuentaAhorro.Add(new CuentaAhorro(n, num, depo));
                             Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("Cuenta Ahorro Creada de forma correta"); Console.ForegroundColor = ConsoleColor.White;
                             Console.WriteLine("Nombre: " + n);
                             Console.WriteLine("Saldo: Q." + depo);
@@ -286,7 +328,7 @@ namespace Banco
                             num = IngresarNumCuenta(cuentaMonetaria);
                             Console.Write("Ingrese a nombre de quien se aperturara la cuenta: ");
                             n = Console.ReadLine();
-                            cuentaMonetaria.Add(new CuentaMonetaria(n, num, 0, $"Se aperturo la cuenta con Q.{depo}"));
+                            cuentaMonetaria.Add(new CuentaMonetaria(n, num, depo));
                             Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("Cuenta Monetaria Creada de forma correta"); Console.ForegroundColor = ConsoleColor.White;
                             Console.WriteLine("Nombre: " + n);
                             Console.WriteLine("Saldo: Q." + depo);
@@ -301,8 +343,9 @@ namespace Banco
                 Console.WriteLine("Presione ENTER para salir");
                 Console.WriteLine("");
                 bandera++;
+                Console.ReadKey();
             }
-            void Depositos(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria, List<Creditos> creditos)
+            void Depositos(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
             {
                 string no;
                 Console.Clear();
@@ -347,6 +390,7 @@ namespace Banco
                                     cuentaAhorro[cuenta].Transaccion(monto);
                                     Console.WriteLine("Saldo actual: Q" + cuentaAhorro[cuenta].Saldo);
                                 }
+                                else Console.WriteLine("Formato de cuenta invalido");
                             }               
                             break;
 
@@ -379,22 +423,22 @@ namespace Banco
                                 cuentaMonetaria[cuenta].Transaccion(monto);
                                 Console.WriteLine("Saldo actual: Q." + cuentaMonetaria[cuenta].Saldo);
                             }
+                            else Console.WriteLine("Formato de cuenta invalido");
                             break;
                     }
-
+                    break;
                 } while (true);
                         Console.WriteLine(""); Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Presione ENTER para salir");
                 Console.WriteLine("");
+                Console.ReadKey();
             }
-        
-        
-             void Credit(List<Creditos> cuentas, List<Creditos> creditos)
+            void Credit(List<Creditos> creditos)
             {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("------CREDITO------");
-                    string no;
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("------CREDITO------");
+                string no;
                 do
                 {
                     int cuenta = 0;
@@ -451,6 +495,7 @@ namespace Banco
 
                         case "2":
                             {
+                                Console.Clear();
                                 Console.Write("Ingrese el numero de DPI: ");
                                 no = Console.ReadLine();
                                 if (no.Length == 13)
@@ -466,28 +511,47 @@ namespace Banco
                                         if (b) { break; }
                                         else { cuenta++; }
                                     }
+                                    if (!b)
+                                    {
+                                        Console.WriteLine("No se encontro dicho DPI");
+                                        break;
+                                    }  
                                     do
                                     {
                                         Console.WriteLine("Bienvenid@ " + creditos[cuenta].Nombre);
                                         Console.Write("Ingrese el monto a abonar: Q.");
                                         monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                                     } while (monto <= 0);
-                                    creditos[cuenta].Deuda -= monto;
-                                    Console.WriteLine("Deuda restante: Q" + Math.Round(creditos[cuenta].Deuda, 2));
-
+                                    if (creditos[cuenta].Deuda >= monto)
+                                    {
+                                        creditos[cuenta].Deuda -= monto;
+                                        Console.WriteLine("Deuda restante: Q" + Math.Round(creditos[cuenta].Deuda, 2));
+                                    }
+                                    else if (creditos[cuenta].Deuda < monto)
+                                    {
+                                        Console.WriteLine($"Solamente se aceptaron Q.{creditos[cuenta].Deuda}, el resto se le devolvera en efectivo");
+                                    }
+                                    if (creditos[cuenta].Deuda == 0)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Console.WriteLine("FELICIDADES!!! Usted ha saldado su deuda con el banco");
+                                        Console.ForegroundColor = ConsoleColor.White;
+                                        creditos.RemoveAt(cuenta);
+                                    }
                                 }
+                                else Console.WriteLine("Formato de DPI invalido");
                                 break;
                             }
 
                     }
+                    break;
                 } while (true);
-                            Console.WriteLine(""); Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(""); Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Presione ENTER para salir");
                 Console.WriteLine("");
+                Console.ReadKey();
             }
-
-
-        void Retiros()
+            void Retiros(List<CuentaAhorro> cuentaAhorro, List<CuentaMonetaria> cuentaMonetaria)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("------RETIROS------"); Console.ForegroundColor = ConsoleColor.White;
@@ -501,24 +565,27 @@ namespace Banco
                     no = Console.ReadLine();
                     if (no.Length == 4)
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"------RETIRO AHORRO------ ");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine("");
-                        foreach (CuentaAhorro cuentas in cuentaAhorro)
-                        {
-                            b = Equals(no, cuentas.NumeroCuenta.ToString());
-                            if (b) { break; }
-                            else { cuenta++; }
-                        }
-                        do
-                        {
-                            Console.Write("Ingrese el monto a depositar: ");
-                            monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
-                        } while (monto <= 0);
-                        cuentaAhorro[cuenta].Transaccion(monto);
-                        Console.WriteLine("Saldo actual: Q" + cuentaAhorro[cuenta].Saldo);
+                        Console.WriteLine("CUENTA DE AHORRO DETECTADA");
+                        Console.WriteLine("Para poder hacer retiros con cheque, porfavor solicite una cuenta monetaria");
                         break;
+                        //Console.ForegroundColor = ConsoleColor.Yellow;
+                        //Console.WriteLine($"------RETIRO AHORRO------ ");
+                        //Console.ForegroundColor = ConsoleColor.White;
+                        //Console.WriteLine("");
+                        //foreach (CuentaAhorro cuentas in cuentaAhorro)
+                        //{
+                        //    b = Equals(no, cuentas.NumeroCuenta.ToString());
+                        //    if (b) { break; }
+                        //    else { cuenta++; }
+                        //}
+                        //do
+                        //{
+                        //    Console.Write("Ingrese el monto a depositar: ");
+                        //    monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
+                        //} while (monto <= 0);
+                        //cuentaAhorro[cuenta].Transaccion(monto);
+                        //Console.WriteLine("Saldo actual: Q" + cuentaAhorro[cuenta].Saldo);
+                        //break;
                     }
                     else if (no.Length == 5)
                     {
@@ -527,31 +594,48 @@ namespace Banco
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("");
 
-                        do
+                        foreach (CuentaMonetaria monetaria in cuentaMonetaria)
                         {
-                            foreach (CuentaMonetaria numero in cuentaMonetaria)
-                            {
-                                b = string.Equals(no, numero.NumeroCuenta.ToString());
-                                if (b) { break; }
-                                else { cuenta++; }
-                            }
-                        } while (!b);
+                            b = Equals(no, monetaria.NumeroCuenta.ToString());
+                            if (b) { break; }
+                            else { cuenta++; }
+                        }
+                        if (!b)
+                        {
+                            Console.WriteLine("No se encontro dicho DPI");
+                            break;
+                        }
 
                         do
                         {
-                            Console.Write("Ingrese el monto a depositar: ");
+                            Console.Write("Ingrese el monto a retirar: ");
                             monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                         } while (monto <= 0);
-                        cuentaMonetaria[cuenta].Transaccion(monto);
+                        if(monto > cuentaMonetaria[cuenta].Saldo)
+                        {
+                            cuentaMonetaria[cuenta].Saldo -= 150;
+                            Console.WriteLine("Usted efectuó un cheque sin fondos, se le hara una multa de Q150.00");
+                            Console.WriteLine("Ahora su saldo actual es Q. " + cuentaMonetaria[cuenta].Saldo);
+                            if (cuentaMonetaria[cuenta].Saldo < 0)
+                            {
+                                Console.WriteLine($"NOTA: usted tiene una deuda de Q.{Math.Abs(cuentaMonetaria[cuenta].Saldo)}. Esta cantidad se le retendra en su proximo deposito");
+                            }
+                        }
+                        else
+                        cuentaMonetaria[cuenta].Transaccion(monto * -1);
                         Console.WriteLine("Saldo actual: Q." + cuentaMonetaria[cuenta].Saldo);
                         break;
                     }
+                    else Console.WriteLine("Formato de cuenta invalido");
                 } while (true);
-Console.WriteLine("");
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Presione ENTER para salir");
-                            Console.WriteLine("");
+                Console.WriteLine("");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Presione ENTER para salir");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("");
+                Console.ReadKey();
             }
+              
             void Estadisticas()
             {
                 Console.Clear();
