@@ -79,11 +79,40 @@ namespace Banco
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("");
+            int cantidadDepositos = 0;
+            int cantidadRetiros = 0;
 
             foreach (var transaccion in Transacciones)
             {
-                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t{transaccion.Monto:C}");
+                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t\t{transaccion.Monto:C}");
+                if (transaccion.Tipo == "Deposito")
+                {
+                    cantidadDepositos++;
+                }
+                else if (transaccion.Tipo == "Retiro")
+                {
+                    cantidadRetiros++;
+                }
             }
+            Console.WriteLine("\nResumen de transacciones:");
+            Console.WriteLine($"Cantidad de Depositos: {cantidadDepositos}");
+            Console.WriteLine($"Cantidad de Retiros: {cantidadRetiros}");
+
+            int maxBarLength = 50; // Longitud máxima de la barra
+            int maxTransacciones = Math.Max(cantidadDepositos, cantidadRetiros);
+
+            int depositoBarLength = (int)((double)cantidadDepositos / maxTransacciones * maxBarLength);
+            int retiroBarLength = (int)((double)cantidadRetiros / maxTransacciones * maxBarLength);
+
+            Console.WriteLine("\nGrafico de Barras:");
+            Console.WriteLine("Depositos:");
+            Console.WriteLine(new string('█', depositoBarLength));
+            Console.WriteLine("Retiros:");
+            Console.WriteLine(new string('█', retiroBarLength));
+
+            Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine("");
+            Console.WriteLine($"Saldo Actual: Q." + Saldo);
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Presione ENTER para continuar");
@@ -149,13 +178,37 @@ namespace Banco
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("{0,-20} {1,-20} {2,10}", "Fecha", "Tipo", "Monto");
             Console.ForegroundColor = ConsoleColor.White;
-            
+            int cantidadDepositos = 0;
+            int cantidadRetiros = 0;
 
             foreach (var transaccion in Transacciones)
             {
-                Console.WriteLine("{0,-20} {1,-20} {2,10:C}", transaccion.Fecha, transaccion.Tipo, transaccion.Monto);
-                
+                Console.WriteLine($"{transaccion.Fecha}\t{transaccion.Tipo}\t\t{transaccion.Monto:C}");
+                if (transaccion.Tipo == "Deposito")
+                {
+                    cantidadDepositos++;
+                }
+                else if (transaccion.Tipo == "Retiro")
+                {
+                    cantidadRetiros++;
+                }
             }
+            Console.WriteLine("\nResumen de transacciones:");
+            Console.WriteLine($"Cantidad de Depositos: {cantidadDepositos}");
+            Console.WriteLine($"Cantidad de Retiros: {cantidadRetiros}");
+
+            int maxBarLength = 50; // Longitud máxima de la barra
+            int maxTransacciones = Math.Max(cantidadDepositos, cantidadRetiros);
+
+            int depositoBarLength = (int)((double)cantidadDepositos / maxTransacciones * maxBarLength);
+            int retiroBarLength = (int)((double)cantidadRetiros / maxTransacciones * maxBarLength);
+
+            Console.WriteLine("\nGrafico de Barras:");
+            Console.WriteLine("Depositos:");
+            Console.WriteLine(new string('█', depositoBarLength));
+            Console.WriteLine("Retiros:");
+            Console.WriteLine(new string('█', retiroBarLength));
+
             Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("");
             Console.WriteLine($"Saldo Actual: Q." + Saldo);
@@ -468,15 +521,12 @@ namespace Banco
                                     Console.WriteLine("");
                                     cuentaAhorro[cuenta].Transaccion(monto);
                                     Console.WriteLine("Saldo actual: Q" + cuentaAhorro[cuenta].Saldo);
-
-
                                 }
                                 else
                                 {
                                     Console.WriteLine("");
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("FORMATO DE CUENTA INVALIDO"); Console.ForegroundColor = ConsoleColor.White;
-                                   
                                 }
       
                                
@@ -485,7 +535,6 @@ namespace Banco
 
                         case "2":
                             Console.WriteLine("");
-                            
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine($"------DEPOSITO CUENTA MONETARIA------ ");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -678,7 +727,6 @@ namespace Banco
                         Console.WriteLine($"------RETIRO MONETARIO------ ");
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("");
-
                         foreach (CuentaMonetaria monetaria in cuentaMonetaria)
                         {
                             b = Equals(no, monetaria.NumeroCuenta.ToString());
@@ -687,18 +735,16 @@ namespace Banco
                         }
                         if (!b)
                         {
-
                             Console.WriteLine("");
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("No se ha encontrado el número de cuenta");
                             Console.ForegroundColor = ConsoleColor.White;
                             Console.WriteLine("");
+                            break;
                         }
                         do
                         {
-                            
                             Console.WriteLine("BIENVENID@ " + cuentaMonetaria[cuenta].Nombre);
-                            
                             Console.Write("Ingrese el monto a retirar: Q.");
                             monto = Math.Abs(Convert.ToDouble(Console.ReadLine()));
                         } while (monto <= 0);
@@ -716,7 +762,6 @@ namespace Banco
                             if (cuentaMonetaria[cuenta].Saldo < 0)
                             {
                                 Console.WriteLine($"Tiene una deuda de Q.{Math.Abs(cuentaMonetaria[cuenta].Saldo)}" + " .Esta cantidad se le retendra en su proximo deposito");
-
                             }
                             
                         }
@@ -724,7 +769,6 @@ namespace Banco
                             cuentaMonetaria[cuenta].Transaccion(monto * -1);
                         Console.WriteLine("Saldo actual: Q." + cuentaMonetaria[cuenta].Saldo);
                         break;
-
                     }
                     else
                     {
